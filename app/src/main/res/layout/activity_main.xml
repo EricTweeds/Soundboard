@@ -24,7 +24,8 @@
             android:id="@+id/imageButton1"
             android:layout_alignParentTop="true"
             android:layout_alignParentStart="true"
-            android:onClick="Go"/>
+            android:onClick="Go"
+            />
         <ImageButton
             android:contentDescription="@string/description"
             android:layout_width="100dp"
@@ -96,6 +97,39 @@
                 android:layout_height="match_parent"
                 android:text="Hello World"
                 android:id="@+id/selectorText"/>
+            <ImageButton
+                android:src="@drawable/ic_insert_photo_black_48dp"
+                android:layout_width="100dp"
+                android:id="@+id/getImage"
+                android:layout_height="100dp"
+                android:text="Image"
+                android:layout_marginTop="50dp"
+                android:onClick="performFileSearch"
+                android:padding="2dp"
+                android:scaleType="fitCenter"
+                android:adjustViewBounds="true"/>
+            <ImageButton
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:id="@+id/getSound"
+                android:src="@drawable/ic_music_video_black_48dp"
+                android:layout_marginTop="50dp"
+                android:layout_toRightOf="@+id/getImage"
+                android:padding="2dp"
+                android:scaleType="fitCenter"
+                android:adjustViewBounds="true"
+                android:onClick="performFileSearchSound"/>
+            <ImageButton
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:id="@+id/done"
+                android:src="@drawable/ic_check_black_48dp"
+                android:layout_marginTop="50dp"
+                android:layout_toRightOf="@+id/getSound"
+                android:onClick="done"
+                android:padding="2dp"
+                android:scaleType="fitCenter"
+                android:adjustViewBounds="true"/>
 
         </RelativeLayout>
     </RelativeLayout>
