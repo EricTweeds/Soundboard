@@ -1,7 +1,9 @@
 package tweedle.eric.soundboard;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.support.v4.app.FragmentManager;
@@ -46,6 +48,7 @@ public class MainActivity extends AppCompatActivity{
     int currentButton = 0;
     boolean[] alreadySet = {false, false, false, false, false, false};
     MediaPlayer[] sounds = new MediaPlayer[6];
+    boolean playing = false;
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater findMenuItems = getMenuInflater();
@@ -82,35 +85,33 @@ public class MainActivity extends AppCompatActivity{
         TextView mtext = (TextView) findViewById(R.id.selectorText);
         switch (view.getId()) {
             case R.id.imageButton1:
-                mtext.setText("button 1");
                 currentButton = 0;
-
                 break;
             case R.id.imageButton2:
-                mtext.setText("button 2");
                 currentButton = 1;
                 break;
             case R.id.imageButton3:
-                mtext.setText("button 3");
                 currentButton = 2;
                 break;
             case R.id.imageButton4:
-                mtext.setText("button 4");
                 currentButton = 3;
                 break;
             case R.id.imageButton5:
-                mtext.setText("button 5");
                 currentButton = 4;
                 break;
             case R.id.imageButton6:
-                mtext.setText("button 6");
                 currentButton = 5;
                 break;
             default:
                 throw new RuntimeException("Unknown button ID");
         }
-        if (alreadySet[currentButton]){
+        if (playing){
+            sounds[currentButton].stop();
+            playing = false;
+        }
+        else if (alreadySet[currentButton]){
             sounds[currentButton].start();
+            playing = true;
         }
         else{
             toggleSelector(true);
@@ -231,4 +232,5 @@ public class MainActivity extends AppCompatActivity{
         AppIndex.AppIndexApi.end(client, getIndexApiAction());
         client.disconnect();
     }
+
 }
