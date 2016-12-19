@@ -24,7 +24,10 @@ import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.appindexing.Thing;
 import com.google.android.gms.common.api.GoogleApiClient;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URI;
 
 import static tweedle.eric.soundboard.R.styleable.View;
 
@@ -44,6 +47,28 @@ public class MainActivity extends AppCompatActivity{
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
 
+        ImageButton btn1 = (ImageButton) findViewById(R.id.imageButton1);
+        ImageButton btn2 = (ImageButton) findViewById(R.id.imageButton2);
+        ImageButton btn3 = (ImageButton) findViewById(R.id.imageButton3);
+        ImageButton btn4 = (ImageButton) findViewById(R.id.imageButton4);
+        ImageButton btn5 = (ImageButton) findViewById(R.id.imageButton5);
+        ImageButton btn6 = (ImageButton) findViewById(R.id.imageButton6);
+        ImageButton[] arr ={btn1, btn2, btn3, btn4, btn5, btn6};
+        SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
+        for (int i = 0; i < arr.length; i++) {
+            String UriString = sharedPref.getString(Integer.toString(i), "na");
+            if (!(UriString.equals("na"))){
+                arr[i].setImageURI(Uri.parse(UriString));
+            }
+        }
+        for (int i = 0; i < sounds.length; i++) {
+            String UriString = sharedPref.getString(Integer.toString(i+10), "na");
+            if (!(UriString.equals("na"))){
+                sounds[i] =MediaPlayer.create(this, (Uri.parse(UriString)));
+                alreadySet[i] = true;
+
+            }
+        }
     }
     int currentButton = 0;
     boolean[] alreadySet = {false, false, false, false, false, false};
@@ -85,21 +110,27 @@ public class MainActivity extends AppCompatActivity{
         TextView mtext = (TextView) findViewById(R.id.selectorText);
         switch (view.getId()) {
             case R.id.imageButton1:
+                mtext.setText("Edit Sound 1");
                 currentButton = 0;
                 break;
             case R.id.imageButton2:
+                mtext.setText("Edit Sound 2");
                 currentButton = 1;
                 break;
             case R.id.imageButton3:
+                mtext.setText("Edit Sound 3");
                 currentButton = 2;
                 break;
             case R.id.imageButton4:
+                mtext.setText("Edit Sound 4");
                 currentButton = 3;
                 break;
             case R.id.imageButton5:
+                mtext.setText("Edit Sound 5");
                 currentButton = 4;
                 break;
             case R.id.imageButton6:
+                mtext.setText("Edit Sound 6");
                 currentButton = 5;
                 break;
             default:
@@ -158,6 +189,8 @@ public class MainActivity extends AppCompatActivity{
             // provided to this method as a parameter.
             // Pull that URI using resultData.getData().
             Uri uri = null;
+            SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPref.edit();
             if (resultData != null) {
                 ImageButton btn1 = (ImageButton) findViewById(R.id.imageButton1);
                 ImageButton btn2 = (ImageButton) findViewById(R.id.imageButton2);
@@ -168,9 +201,14 @@ public class MainActivity extends AppCompatActivity{
                 ImageButton[] arr ={btn1, btn2, btn3, btn4, btn5, btn6};
                 if (currentType.equals("image")) {
                     arr[currentButton].setImageURI(resultData.getData());
+                    editor.putString(Integer.toString(currentButton), resultData.getData().toString());
+                    editor.apply();
+
                 }
                 else if (currentType.equals("audio")){
                     sounds[currentButton] = MediaPlayer.create(this, resultData.getData());
+                    editor.putString(Integer.toString(currentButton+10), resultData.getData().toString());
+                    editor.apply();
                     alreadySet[currentButton] = true;
                 }
             }
